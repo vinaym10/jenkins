@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Find Server Details') {
+            steps {
+                script {
+                    def masterNode = Jenkins.instance
+                    def slaveNodes = Jenkins.instance.nodes
+                    
+                    echo "Master Server Details:"
+                    echo "----------------------"
+                    echo "Name: ${masterNode.nodeName}"
+                    echo "Description: ${masterNode.nodeDescription}"
+                    echo "Executors: ${masterNode.numExecutors}"
+                    echo "Workspace Path: ${masterNode.workspaceFor(null)}"
+                    
+                    echo "\nSlave Server Details:"
+                    echo "----------------------"
+                    slaveNodes.each { slave ->
+                        echo "Name: ${slave.nodeName}"
+                        echo "Description: ${slave.nodeDescription}"
+                        echo "Executors: ${slave.numExecutors}"
+                        echo "Workspace Path: ${slave.workspaceFor(null)}"
+                        echo ""
+                    }
+                }
+            }
+        }
+    }
+}
